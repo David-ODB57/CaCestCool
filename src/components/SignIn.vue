@@ -3,48 +3,55 @@
     <img :src="require('../assets/images/logo.png')" alt="logo" />
     <form>
       <input
-        v-model.trim="email"
-        @input="checkEmail"
+        v-model.trim="form.email"
         placeholder="Email"
         type="email"
         name="email"
         required
       />
       <input
-        v-model="password"
+        v-model.trim="form.password"
         placeholder="Mot de passe"
         type="password"
         name="password"
       />
+      <button @click="onSubmit">Se connecter</button>
     </form>
-    <button @submit="onSubmit">Se connecter</button>
     <router-link :to="'/profil'">Mot de passe perdu ?</router-link>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "SignIn",
   data() {
     return {
-      email: null,
-      password: null,
+      form: {
+        email: null,
+        password: null,
+      },
     };
   },
   methods: {
-    onSubmit(event) {
+    onSubmit() {
+      const url = "http://localhost:3000/signIn";
       event.preventDefault();
-      alert(JSON.stringify(this.form));
+      console.table(this.form.email, this.form.password);
+      axios
+        .post(url, this.form)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
     },
     onReset(event) {
       event.preventDefault();
       this.email = "";
     },
-    // checkEmail() {
-    //   const regExp =
-    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //   if (!regExp.test(this.email) && this.email !== "") {}
-    // }
   },
 };
 </script>

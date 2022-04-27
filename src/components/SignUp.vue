@@ -3,27 +3,37 @@
     <img :src="require('../assets/images/logo.png')" alt="logo" />
     <form>
       <input
-        v-model.trim="email"
+        v-model.trim="form.name"
+        placeholder="name"
+        type="text"
+        name="name"
+        required
+      />
+      <input
+        v-model.trim="form.email"
         @input="checkEmail"
         placeholder="Email"
         type="email"
         name="email"
         required
       />
+      <!-- <span v-if="errors" class="errorNotification">{{ errors }}</span> -->
       <input
-        v-model.trim="password"
+        v-model.trim="form.password"
         placeholder="Mot de passe"
         type="password"
         name="password"
+        required
       />
       <input
-        v-model.trim="password"
+        v-model.trim="pwd_confirmation"
         placeholder="Confirmer le mot de passe"
         type="password"
-        name="confirmation"
+        name="pwd_confirmation"
+        required
       />
     </form>
-    <button @submit="onSubmit">S'enregister</button>
+    <button @click="checkForm">S'enregister</button>
     <router-link :to="'/login'">Vous avez déjà un compte ?</router-link>
   </div>
 </template>
@@ -33,23 +43,30 @@ export default {
   name: "TheForm",
   data() {
     return {
-      email: null,
+      errors: [],
+      form: {
+        name: null,
+        email: null,
+        password: null,
+      },
+      pwd_confirmation: null,
     };
   },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
+    checkForm() {
+      this.checkEmail && this.form.password && this.pwd_confirmation
+        ? true
+        : this.errors.push("Email invalide");
+      this.errors = [];
+      if (!this.form.password) this.errors.push("Un mot de passe est requis");
+      if (this.form.password !== this.pwd_confirmation)
+        this.errors.push("Les mots de passe ne correspondent pas");
     },
-    onReset(event) {
-      event.preventDefault();
-      this.email = "";
+    checkEmail() {
+      const regExp =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regExp.test(this.form.email);
     },
-    // checkEmail() {
-    //   const regExp =
-    //     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //   if (!regExp.test(this.email) && this.email !== "") {}
-    // }
   },
 };
 </script>
