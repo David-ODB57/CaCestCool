@@ -1,29 +1,39 @@
 <template>
   <div class="container">
-    <img :src="require('../assets/images/logo.png')" alt="logo" />
-    <form>
+    <img :src="require('../assets/images/logo.svg')" alt="logo" />
+    <form @keyup.enter="onSubmit()" @submit.prevent="onSubmit()">
       <input
         v-model.trim="form.email"
+        v-validate="{ required: true, regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }"
         placeholder="Email"
         type="email"
         name="email"
-        required
       />
+      <span v-if="submitted && errors.has('email')" class="errorNotification">{{
+        errors.first("email")
+      }}</span>
       <input
         v-model.trim="form.password"
+        v-validate="'required'"
         placeholder="Mot de passe"
         type="password"
         name="password"
       />
+      <span
+        v-if="submitted && errors.has('password')"
+        class="errorNotification"
+        >{{ errors.first("password") }}</span
+      >
       <button @click="onSubmit">Se connecter</button>
     </form>
-    <router-link :to="'/profil'">Mot de passe perdu ?</router-link>
+    <div v-if="message" class="errorNotification">
+      {{ message }}
+    </div>
+    <router-link :to="'/lost'">Mot de passe perdu ?</router-link>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "SignIn",
   data() {
@@ -32,25 +42,34 @@ export default {
         email: null,
         password: null,
       },
+      submitted: false,
+      successful: false,
+      message: "",
     };
   },
   methods: {
     onSubmit() {
-      const url = "http://localhost:3000/signIn";
-      event.preventDefault();
-      console.table(this.form.email, this.form.password);
-      axios
-        .post(url, this.form)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
-    },
-    onReset(event) {
-      event.preventDefault();
-      this.email = "";
+      this.message = "";
+      this.submitted = true;
+      // trigger validation once the user submits the form
+      this.$validator.validateAll().then((isValid) => {
+        if (isValid) {
+          // console.log("Tous les champs sont valides", isValid);
+          this.$store.dispatch("login", this.form).then(
+            (data) => {
+              // console.log(data);
+              this.message = data.message;
+              this.successful = data.success;
+            },
+            (error) => {
+              // console.log(error);
+              this.message = error.message;
+              this.successful = false;
+            }
+          );
+          this.$store.dispatch("getAllPosts");
+        }
+      });
     },
   },
 };
@@ -70,6 +89,7 @@ img {
 form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   outline: none;
 }
 input {
@@ -90,7 +110,12 @@ input:focus {
 input + input {
   margin-top: 32px;
 }
-::placeholder {
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: hsla(0, 0%, 72%, 1);
+}
+::-moz-placeholder {
+  /* Firefox 19+ */
   color: hsla(0, 0%, 72%, 1);
 }
 button {
@@ -100,7 +125,7 @@ button {
   background: #0085ff;
   border-radius: 30px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18px;
   text-align: center;
   border: none;
   margin-top: 43px;
@@ -114,5 +139,12 @@ a {
   margin-top: 33px;
   color: #0084ff;
   text-decoration: none;
+}
+.errorNotification {
+  color: red;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
 }
 </style>

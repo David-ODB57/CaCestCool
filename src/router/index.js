@@ -15,6 +15,16 @@ const routes = [
     name: "login",
     component: () => import("../views/LoginPage.vue"),
   },
+  {
+    path: "/user/profil",
+    name: "profil",
+    component: () => import("../views/MyProfil.vue"),
+  },
+  {
+    path: "/posts/add",
+    name: "new",
+    component: () => import("../views/CreatePost.vue"),
+  },
 ];
 
 const router = new VueRouter({

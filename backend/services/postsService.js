@@ -9,7 +9,7 @@ exports.list = () => {
 };
 
 //Tous les POSTS du user
-exports.listUserPosts = (userName) => {
+exports.listUserPosts = (userEmail) => {
   // on interroge la base de donnée
-  return Post.find({ author: userName });
+  return Post.find({ email: userEmail });
 };

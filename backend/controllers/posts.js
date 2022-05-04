@@ -1,9 +1,7 @@
-const Post = require("../models/Post");
+const Post = require("../models/post");
 const postServices = require("../services/postsService");
-// /////////////////////////////// //
-// AFFICHER TOUS LES POSTS DU SITE //
-// /////////////////////////////// //
-//contrôleur de la route GET /todos
+
+//contrôleur de la route GET /posts
 exports.list = async (req, res) => {
   try {
     //Stock la réponse de la query faite sur la DB par le service propre aux Posts
@@ -14,12 +12,6 @@ exports.list = async (req, res) => {
     res.status(400).json(e);
   }
 };
-
-// /////////////////////////////// //
-// AFFICHER TOUS LES POSTS DU USER //
-// /////////////////////////////// //
-// //contrôleur de la route GET /users/:id/posts
-// exports.list
 
 //contrôleur de la route POST /todos/
 exports.newPost = (req, res) => {
@@ -32,7 +24,7 @@ exports.newPost = (req, res) => {
     });
   }
   //si tout va bien
-  //on crée un nouveau document Mongo avec le model Todo
+  //on crée un nouveau document Mongo avec le model Post
   const post = new Post({
     ...req.body, //ici on passe les données envoyées dans le body de la requête
   });
@@ -51,7 +43,7 @@ exports.newPost = (req, res) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-//contrôleur de la route PUT /todos/:id
+//contrôleur de la route PUT /Post/:id
 exports.patchItem = (req, res) => {
   //mise à jour de l'élément en BDD
   Todo.updateOne({ _id: req.params.id }, { ...req.body })
@@ -66,13 +58,13 @@ exports.patchItem = (req, res) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-//contrôleur de la route DELETE /todo/:id
+//contrôleur de la route DELETE /Post/:id
 exports.deleteItem = (req, res) => {
   // on interroge la base de donnée
-  Todo.deleteOne({
+  Post.deleteOne({
     _id: req.params.id,
   })
-    .then((todo) => {
+    .then((post) => {
       // si la tache est trouvée, on la supprime, puis renvoie un message de confirmation
       res.status(201).json({
         message: "Tache supprimée",

@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <div class="id-user">
-      <img src="path/to/user/avatar" alt="" />
+      <img src="#" alt="" />
       <span class="time">12:32</span>
       <span class="date">21/04/22</span>
     </div>

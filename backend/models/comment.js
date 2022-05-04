@@ -11,12 +11,9 @@ const commentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
+  CreatedAt: { type: Date, default: Date.now },
   // Doit correspondre à l'avatar de l'auteur du commentaire
   avatar: String,
 });
 
-module.exports = mongoose.model("Comments", commentSchema);
+module.exports = mongoose.model("Comment", commentSchema);
