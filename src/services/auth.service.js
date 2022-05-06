@@ -34,20 +34,41 @@ function signUp(user) {
   });
 }
 
+function getUserAccount(user) {
+  console.table(user);
+  return axios
+    .get(`${url}user/profil`, {
+      headers: {
+        authorization: `bearer ${user.accessToken}`,
+      },
+    })
+    .then((response) => {
+      // console.log(response);
+      return response;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
 function getAllPosts(user) {
   return axios
     .get(`${url}posts`, {
       headers: {
-        Authorization: `bearer ${user.accessToken}`,
+        authorization: `bearer ${user.accessToken}`,
       },
     })
     .then((response) => {
       console.table(response);
+      return response;
     })
     .catch((err) => {
-      // console.log("Ooops", err.response.data);
-      return err.response.data;
+      return err;
     });
 }
 
-export default { login, logout, signUp, getAllPosts };
+// function getUserPosts(userId) {
+//   return null;
+// }
+
+export default { login, logout, signUp, getUserAccount, getAllPosts };

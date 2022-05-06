@@ -53,9 +53,9 @@ app.use(
 
 // Verification Token
 const verifyUserAccess = async (req, res, next) => {
-  console.log(req.headers["authorization"]);
+  // console.log(req.headers["authorization"]);
   let token = req.headers["authorization"].split(" ")[1];
-  console.log(token);
+  // console.log(token);
   if (!token) return res.status(403).send({ message: "No token provided!" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -133,11 +133,23 @@ app.post("/auth/signIn", async (req, res) => {
   }
 });
 
+app.get("/auth/user/profil", [verifyUserAccess], async (req, res) => {
+  try {
+    // console.log(req.user.data.id);
+    // console.log(req.params);
+    let userData = await User.findOne({ _id: req.user.data.id });
+    res.status(200).send(userData);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // Liste de tous les Posts
 app.get("/auth/posts", [verifyUserAccess], async (req, res) => {
   console.log("list of all posts");
   console.log(req.body.id);
   try {
+    //Preciser les Posts appartenant au user avec l'id
     let postsList = await Post.find();
     console.log(postsList);
 

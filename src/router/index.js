@@ -25,6 +25,11 @@ const routes = [
     name: "new",
     component: () => import("../views/CreatePost.vue"),
   },
+  {
+    path: "/user/changePassword",
+    name: "password",
+    component: () => import("../views/ChangePasswordForm.vue"),
+  },
 ];
 
 const router = new VueRouter({

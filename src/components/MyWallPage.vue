@@ -2,7 +2,10 @@
   <div class="wall-posts">
     <h1>Mon Mur</h1>
     <hr />
-    <post-card v-for="post in posts" :key="post"></post-card>
+    <post-card
+      v-for="post in $store.getters.listOfPosts"
+      :key="post"
+    ></post-card>
   </div>
 </template>
 
@@ -12,20 +15,20 @@ import PostCard from "./PostCard.vue";
 export default {
   name: "MyWallPage",
   components: { PostCard },
-  data() {
-    return {
-      posts: [],
-    };
-  },
+  // data() {
+  //   return {
+  //     posts: [],
+  //   };
+  // },
   // computed: {
   //   posts() {
   //     return this.$store.dispatch("getAllPosts");
   //   },
   // },
-  async mounted() {
+  mounted() {
     // console.table(this.$store.state.posts);
     // console.log(this.$store.state.user);
-    this.posts = await this.$store.dispatch("getAllPosts");
+    this.$store.dispatch("getAllPosts");
   },
 };
 </script>

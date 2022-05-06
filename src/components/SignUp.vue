@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <img :src="require('../assets/images/logo.svg')" alt="logo" />
-    <form @keyup.enter="checkForm()" @submit.prevent="checkForm">
+    <form @keyup.enter="checkForm" @submit.prevent="checkForm">
       <input
         v-model.trim="form.email"
         v-validate="{ required: true, regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }"

@@ -1,17 +1,17 @@
 <template>
   <div class="wall-content">
     <my-wall-menu></my-wall-menu>
-    <my-wall-page></my-wall-page>
+    <my-account></my-account>
   </div>
 </template>
 
 <script>
 import MyWallMenu from "@/components/MyWallMenu.vue";
-import MyWallPage from "@/components/MyWallPage.vue";
+import MyAccount from "@/components/MyAccount.vue";
 
 export default {
   name: "MyProfil",
-  components: { MyWallMenu, MyWallPage },
+  components: { MyWallMenu, MyAccount },
 };
 </script>
 
