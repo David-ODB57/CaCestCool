@@ -1,6 +1,10 @@
 # cacestcool
 
 ## Project setup
+
+D'abord créer une BDD Mongo avec Mongo Compass ou autre:
+Nom de la DB : cacestcool
+collection: user
 ```
 npm install
 ```
