@@ -1,3 +1,4 @@
+//PAS UTILSE --- A FAIRE//
 const Post = require("../models/post");
 const postServices = require("../services/postsService");
 
@@ -67,7 +68,7 @@ exports.deleteItem = (req, res) => {
     .then((post) => {
       // si la tache est trouvée, on la supprime, puis renvoie un message de confirmation
       res.status(201).json({
-        message: "Tache supprimée",
+        message: "Post supprimé",
       });
       // en cas d'erreur on capture le message d'erreur pour l'aficher dans la réponse en JSON
     })

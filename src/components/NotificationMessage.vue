@@ -1,4 +1,5 @@
 <template>
+  <!-- A FAIRE !  -->
   <div class="message">
     <p>12 nouveaux posts depuis votre dernière visite</p>
   </div>

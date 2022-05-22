@@ -1,17 +1,32 @@
 <template>
   <div class="wall-content">
-    <my-wall-menu></my-wall-menu>
-    <my-account></my-account>
+    <my-profil-menu />
+    <component :is="currentPage"></component>
   </div>
 </template>
 
 <script>
-import MyWallMenu from "@/components/MyWallMenu.vue";
-import MyAccount from "@/components/MyAccount.vue";
+import MyProfilHome from "@/components/MyProfilHome.vue";
+import MyProfilMenu from "@/components/MyProfilMenu.vue";
+import MyProfilAccount from "@/components/MyProfilAccount.vue";
+import MyProfilWall from "@/components/MyProfilWall.vue";
+import MyProfilMessages from "@/components/MyProfilMessages.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "MyProfil",
-  components: { MyWallMenu, MyAccount },
+  components: {
+    MyProfilHome,
+    MyProfilMenu,
+    MyProfilAccount,
+    MyProfilWall,
+    MyProfilMessages,
+  },
+  computed: {
+    ...mapGetters({
+      currentPage: "getCurrentProfilPage",
+    }),
+  },
 };
 </script>
 

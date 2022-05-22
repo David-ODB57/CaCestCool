@@ -1,28 +1,27 @@
 <template>
   <div class="form-add-post">
-    <h1>Ajouter un post</h1>
+    <h1>Editer un post</h1>
     <hr />
     <div class="form-container">
+      <div class="image" v-if="postData.image">
+        <img :src="postData.image" alt="image du post" />
+      </div>
       <form @submit.prevent="onSubmit" enctype="multipart/form-data">
         <div class="form-group">
           <label for="title">Titre</label>
           <input
             v-model.trim="title"
-            v-validate="'required'"
             class="form-control"
             type="text"
             name="title"
-            placeholder="titre..."
           />
         </div>
         <div class="form-group">
           <label for="contenu">Contenu</label>
           <textarea
             v-model.trim="body"
-            v-validate="'required'"
             class="form-control"
             name="contenu"
-            placeholder="contenu..."
           ></textarea>
         </div>
         <div class="form-group">
@@ -39,7 +38,7 @@
             errors.first("image")
           }}</span>
         </div>
-        <button type="submit" class="btn btn-outline-primary">ajouter</button>
+        <button type="submit" class="btn btn-outline-primary">modifier</button>
       </form>
       <div
         v-if="message"
@@ -55,24 +54,17 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   data() {
     return {
-      // author: "",
-      title: null,
-      body: null,
+      postData: {},
+      title: "",
+      body: "",
       image: null,
       submitted: false,
       successful: false,
-      message: null,
+      message: "",
     };
-  },
-  computed: {
-    ...mapGetters({
-      token: "getToken",
-    }),
   },
   methods: {
     onSelect(evt) {
@@ -85,23 +77,22 @@ export default {
       // trigger validation once the user submits the form
       this.$validator.validate().then((isValid) => {
         if (isValid) {
-          let token = this.token;
+          let token = this.$store.getters.getToken;
           let formData = new FormData();
 
           if (this.image !== null || "") {
             formData.append("title", this.title);
             formData.append("body", this.body);
-            formData.append("author", this.$store.state.user.id);
             formData.append("image", this.image, this.image.name);
           } else {
             formData.append("title", this.title);
             formData.append("body", this.body);
-            formData.append("author", this.$store.state.user.id);
           }
 
           this.$store
-            .dispatch("addPost", {
+            .dispatch("editPost", {
               data: formData,
+              postId: this.$route.params.postId,
               token: token,
             })
             .then((res) => {
@@ -111,6 +102,11 @@ export default {
         }
       });
     },
+  },
+  mounted() {
+    this.postData = this.$store.getters.getPostSpec(this.$route.params.postId);
+    this.title = this.postData.title;
+    this.body = this.postData.body;
   },
 };
 </script>

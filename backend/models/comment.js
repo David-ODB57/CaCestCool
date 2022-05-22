@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const commentSchema = mongoose.Schema({
-  // article est l'id de l'article auquel est rattaché le commentaire
-  article: Number,
+  post_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+  },
   author: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   body: {
@@ -12,8 +15,6 @@ const commentSchema = mongoose.Schema({
     required: true,
   },
   CreatedAt: { type: Date, default: Date.now },
-  // Doit correspondre à l'avatar de l'auteur du commentaire
-  avatar: String,
 });
 
 module.exports = mongoose.model("Comment", commentSchema);

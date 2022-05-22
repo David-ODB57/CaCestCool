@@ -43,34 +43,35 @@ export default {
         password: null,
       },
       submitted: false,
-      successful: false,
       message: "",
     };
+  },
+  computed: {
+    logged() {
+      console.log("Is user loggedIn", this.$store.getters.getUserStatus);
+      return this.$store.getters.getUserStatus;
+    },
   },
   methods: {
     onSubmit() {
       this.message = "";
       this.submitted = true;
-      // trigger validation once the user submits the form
+      // déclenche la validation quand l'utilisateur soumet le formulaire
       this.$validator.validateAll().then((isValid) => {
         if (isValid) {
-          // console.log("Tous les champs sont valides", isValid);
-          this.$store.dispatch("login", this.form).then(
-            (data) => {
-              // console.log(data);
-              this.message = data.message;
-              this.successful = data.success;
-            },
-            (error) => {
-              // console.log(error);
-              this.message = error.message;
-              this.successful = false;
-            }
-          );
-          this.$store.dispatch("getAllPosts");
+          this.$store.dispatch("login", this.form).then((res) => {
+            console.log(res);
+            this.message = res.message;
+          });
         }
       });
     },
+  },
+  mounted() {
+    if (this.logged) {
+      console.log("rediriger vers la page Home du user");
+      this.$router.push(`/auth/user/profil/home`);
+    }
   },
 };
 </script>

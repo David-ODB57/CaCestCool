@@ -9,7 +9,15 @@ export default {
   components: {
     SignUp,
   },
+  computed: {
+    logged() {
+      return this.$store.getters.getUserStatus;
+    },
+  },
+  mounted() {
+    if (this.logged) {
+      this.$router.push(`/auth/user/profil/home`);
+    }
+  },
 };
 </script>
-
-<style></style>

@@ -7,35 +7,70 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
     component: HomePage,
   },
   {
     path: "/login",
-    name: "login",
     component: () => import("../views/LoginPage.vue"),
   },
   {
-    path: "/user/profil",
-    name: "profil",
+    path: "/auth/user/profil",
     component: () => import("../views/MyProfil.vue"),
+    children: [
+      {
+        path: "home",
+        component: () => import("../components/MyProfilHome.vue"),
+      },
+    ],
   },
   {
-    path: "/posts/add",
-    name: "new",
+    path: "/auth/user/:userId/posts/:postId",
+    component: () => import("../views/PostPage.vue"),
+  },
+  {
+    path: "/auth/user/posts/add",
     component: () => import("../views/CreatePost.vue"),
   },
   {
-    path: "/user/changePassword",
-    name: "password",
-    component: () => import("../views/ChangePasswordForm.vue"),
+    path: "/auth/user/:userId/posts/edit/:postId",
+    component: () => import("../views/EditPost.vue"),
   },
+  { path: "*", redirect: "/" },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+const originalPush = router.push;
+router.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) {
+    return originalPush.call(this, location, onResolve, onReject);
+  }
+
+  return originalPush.call(this, location).catch((err) => {
+    if (VueRouter.isNavigationFailure(err)) {
+      return err;
+    }
+
+    return Promise.reject(err);
+  });
+};
+
+router.beforeEach((to, from, next) => {
+  //  redirige vers la page de login si l'utilisateur n'est pas connecté
+  // et essaie d'avoir accès à une page necessitant d'être authentifié
+  const publicPages = ["/login", "/"];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem("user");
+
+  if (authRequired && !loggedIn) {
+    return next("/login");
+  }
+
+  next();
 });
 
 export default router;

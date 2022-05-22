@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img :src="require('../assets/images/logo.svg')" alt="logo" />
+    <img :src="require('@/assets/images/logo.svg')" alt="logo" />
     <form @keyup.enter="checkForm" @submit.prevent="checkForm">
       <input
         v-model.trim="form.email"
@@ -19,6 +19,7 @@
         type="password"
         name="password"
         ref="password"
+        id="password"
       />
       <span
         v-if="submitted && errors.has('password')"
@@ -28,10 +29,11 @@
       <input
         v-model.trim="pwd_confirmation"
         v-validate="'required|confirmed:password'"
-        data-vv-as="password"
+        data-vv-as="confirmation du password"
         placeholder="Confirmer le mot de passe"
         type="password"
         name="pwd_confirmation"
+        id="pwd_confirmation"
       />
       <span
         v-if="submitted && errors.has('pwd_confirmation')"
@@ -62,21 +64,9 @@ export default {
       message: "",
     };
   },
-  computed: {
-    logged() {
-      console.log("verif if logged", this.$store.state.status.logged);
-      return this.$store.state.status.logged;
-    },
-  },
-  mounted() {
-    if (this.logged) {
-      console.log("rediriger vers /user");
-      this.$router.push("/user/profil");
-    }
-  },
   methods: {
     checkForm() {
-      console.log("verif FORM");
+      console.log("verif Form SIGNUP");
       this.message = "";
       this.submitted = true;
       // trigger validation once the user submits the form

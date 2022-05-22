@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
+  nom: {
+    type: String,
+    default: "",
+  },
+  prenom: {
+    type: String,
+    default: "",
+  },
   email: {
     type: String,
     required: true,
@@ -11,11 +19,10 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     // minlength: 10,
-    select: false,
   },
   avatar: {
     type: String,
-    default: "../upload/avatars/default.png",
+    default: "http://localhost:3000/upload/avatars/default.png",
   },
 });
 

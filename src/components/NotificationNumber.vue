@@ -1,4 +1,5 @@
 <template>
+  <!-- A FAIRE !  -->
   <div class="number">
     <span>12</span>
   </div>

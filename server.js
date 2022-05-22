@@ -1,7 +1,7 @@
 require("dotenv").config();
 const http = require("http");
 
-//Express Server
+//NodeJS - Express Server
 const app = require("./backend/app");
 app.set("port", process.env.PORT || 3000);
 

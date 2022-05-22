@@ -11,7 +11,7 @@ function comparePasswords(plainTextPassword, hash) {
 }
 
 function createToken(data) {
-  console.log(data);
+  console.log("data send to createToken", data);
   return jwt.sign({ data }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
