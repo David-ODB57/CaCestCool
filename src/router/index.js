@@ -59,7 +59,6 @@ router.push = function push(location, onResolve, onReject) {
   });
 };
 
-<<<<<<< HEAD
 // router.beforeEach((to, from, next) => {
 //   //  redirige vers la page de login si l'utilisateur n'est pas connecté
 //   // et essaie d'avoir accès à une page necessitant d'être authentifié
@@ -74,6 +73,4 @@ router.push = function push(location, onResolve, onReject) {
 //   next();
 // });
 
-=======
->>>>>>> e1b395ba74fde83de08c77e207d8813dc3f500ce
 export default router;
