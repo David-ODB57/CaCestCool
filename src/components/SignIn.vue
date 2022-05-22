@@ -71,8 +71,6 @@ export default {
     if (this.logged) {
       console.log("rediriger vers la page Home du user");
       this.$router.push(`/auth/user/profil/home`);
-    } else {
-      this.$router.push(`/`);
     }
   },
 };

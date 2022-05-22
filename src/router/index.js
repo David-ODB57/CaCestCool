@@ -59,18 +59,18 @@ router.push = function push(location, onResolve, onReject) {
   });
 };
 
-router.beforeEach((to, from, next) => {
-  //  redirige vers la page de login si l'utilisateur n'est pas connecté
-  // et essaie d'avoir accès à une page necessitant d'être authentifié
-  const publicPages = ["/login", "/"];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
+// router.beforeEach((to, from, next) => {
+//   //  redirige vers la page de login si l'utilisateur n'est pas connecté
+//   // et essaie d'avoir accès à une page necessitant d'être authentifié
+//   const publicPages = ["/login", "/"];
+//   const authRequired = !publicPages.includes(to.path);
+//   const loggedIn = localStorage.getItem("user");
 
-  if (authRequired && !loggedIn) {
-    return next("/login");
-  }
+//   if (authRequired && !loggedIn) {
+//     return next("/login");
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default router;
