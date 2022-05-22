@@ -419,9 +419,6 @@ app.delete("/auth/user/posts/delete/:id", async (req, res) => {
 app.post("/auth/user/:postId/comment", async (req, res) => {
   console.log("comment added !");
   try {
-    console.log(req.body.comment);
-    console.log(req.user.data.id);
-    console.log(req.params.postId);
     const newComment = new Comment({
       post_id: req.params.postId,
       author: req.user.data.id,
