@@ -6,6 +6,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const User = require("./models/user");
 const Post = require("./models/post");
+const Comment = require("./models/comment");
 const multer = require("multer");
 const mongoose = require("mongoose");
 
@@ -19,6 +20,7 @@ const {
   comparePasswords,
   createToken,
 } = require("./services/authService");
+const comment = require("./models/comment");
 
 mongoose
   .connect(`mongodb://${cluster}/${db}`, {
@@ -114,6 +116,7 @@ const verifyUserId = async (req, res, next) => {
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(xss());
 app.use(["/upload", "/posts"], express.static(path.join(__dirname, "/upload")));
 
@@ -413,10 +416,26 @@ app.delete("/auth/user/posts/delete/:id", async (req, res) => {
 });
 
 // Add a Comment
-app.post("auth/user/comment", async (req, res) => {
+app.post("/auth/user/:postId/comment", async (req, res) => {
+  console.log("comment added !");
   try {
-    console.log("comment added !");
-    console.log(req.body);
+    console.log(req.body.comment);
+    console.log(req.user.data.id);
+    console.log(req.params.postId);
+    const newComment = new Comment({
+      post_id: req.params.postId,
+      author: req.user.data.id,
+      body: req.body.comment,
+    });
+    return await Comment.create(newComment, (err, data) => {
+      if (err)
+        res.status(500).send({
+          message:
+            err.message ||
+            "Une erreur inconnue est survenue lors de la creation.",
+        });
+      else res.status(201).send(data);
+    });
   } catch (err) {
     console.log(err);
   }

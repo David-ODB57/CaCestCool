@@ -4,6 +4,7 @@ const commentSchema = mongoose.Schema({
   post_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post",
+    required: true,
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,

@@ -196,13 +196,19 @@ async function deletePost(postId, token) {
   }
 }
 
-async function newComment(comment, token) {
+async function newComment(comment, postId, token) {
+  console.log(comment);
+  console.log(token);
   try {
-    const response = await axios.post(`${authUrl}user/comment`, comment, {
-      headers: {
-        authorization: `bearer ${token}`,
-      },
-    });
+    const response = await axios.post(
+      `${authUrl}user/${postId}/comment`,
+      { comment: comment },
+      {
+        headers: {
+          authorization: `bearer ${token}`,
+        },
+      }
+    );
     return response;
   } catch (err) {
     return err.response;

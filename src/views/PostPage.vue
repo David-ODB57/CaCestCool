@@ -126,18 +126,22 @@ export default {
       this.formVisible = !this.formVisible;
     },
     submitComment() {
+      console.log("form submitted");
       this.submitted = true;
       // trigger validation once the user submits the form
       this.$validator.validate().then((isValid) => {
+        console.log("Validation Form Add Comment: ", isValid);
         if (isValid) {
           let token = this.$store.getters.getToken;
 
           this.$store
             .dispatch("addComment", {
               data: this.newComment,
+              postId: this.postData._id,
               token: token,
             })
             .then((res) => {
+              console.log(res);
               this.message = res.data.message;
               this.successful = res.data.success;
             });

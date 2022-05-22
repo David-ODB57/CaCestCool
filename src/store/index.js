@@ -305,6 +305,7 @@ const store = new Vuex.Store({
     async addComment(_, commentToken) {
       return await AuthService.newComment(
         commentToken.data,
+        commentToken.postId,
         commentToken.token
       ).then(
         (response) => {
