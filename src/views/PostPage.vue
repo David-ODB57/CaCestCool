@@ -43,7 +43,7 @@
       {{ postData.body || "pas de contenu " }}
     </p>
     <hr class="bottom" />
-    <!-- <div class="comments" v-for="comment in comments" key="comment"></div> -->
+    <CommentCard v-for="com in coms" :key="com._id" :data="com" />
     <div class="add-comment">
       <form @submit.prevent="submitComment">
         <textarea
@@ -96,12 +96,12 @@ import CommentCard from "@/components/CommentCard.vue";
 
 export default {
   name: "PostPage",
-  component: { CommentCard },
+  components: { CommentCard },
   data() {
     return {
       formVisible: false,
       postData: {},
-      comments: [],
+      coms: [],
       newComment: "",
       submitted: false,
     };
@@ -156,7 +156,14 @@ export default {
     },
   },
   mounted() {
+    console.log(this.postData);
+    console.log(this.coms);
+  },
+  created() {
     this.postData = this.$store.getters.getPostSpec(this.$route.params.postId);
+    this.coms.push(
+      this.$store.getters.getPostComments(this.$route.params.postId)
+    );
   },
 };
 </script>
@@ -233,7 +240,7 @@ a {
   align-items: center;
   justify-content: flex-end;
 }
-.comment {
+comment {
   background: #0085ff;
   color: white;
   font-family: Inter;

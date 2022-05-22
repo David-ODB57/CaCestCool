@@ -295,6 +295,20 @@ app.get("/auth/posts/:id", async (req, res) => {
     return res.status(404).send({ message: "Aucun document trouvé ! " });
   }
 });
+
+// Tous les commentaires
+app.get("/auth/comments", async (req, res) => {
+  try {
+    const commentsList = await Comment.find();
+    // .sort({ CreatedAt: "descending" })
+    // .populate("author", { avatar: 1 });
+    res.status(200).send(commentsList);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).send({ message: "Aucun document de trouvé ! " });
+  }
+});
+
 // Like a Post
 app.put("/auth/posts/likes", async (req, res) => {
   try {

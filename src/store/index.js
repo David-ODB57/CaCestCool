@@ -8,6 +8,7 @@ Vue.use(Vuex);
 const user = JSON.parse(localStorage.getItem("user"));
 const posts = JSON.parse(localStorage.getItem("allPosts"));
 const userPosts = JSON.parse(localStorage.getItem("userPosts"));
+const comments = JSON.parse(localStorage.getItem("comments"));
 
 const store = new Vuex.Store({
   state: {
@@ -17,6 +18,7 @@ const store = new Vuex.Store({
     user: user ? user : null,
     posts: posts ? posts : [],
     userPosts: userPosts ? userPosts : [],
+    comments: comments ? comments : [],
     profilMenuList: [
       { id: "MyProfilWall", name: "Mon mur" },
       { id: "MyProfilMessages", name: "Mes messages" },
@@ -65,6 +67,9 @@ const store = new Vuex.Store({
     getPostSpec: (state) => (id) => {
       return state.posts.find((elm) => elm._id === id);
     },
+    getPostComments: (state) => (id) => {
+      return state.comments.find((elm) => elm.post_id === id);
+    },
   },
 
   mutations: {
@@ -89,6 +94,7 @@ const store = new Vuex.Store({
       state.user = null;
       state.posts = [];
       state.userPosts = [];
+      state.comments = [];
       setTimeout(() => router.push("/login"), 1000);
     },
     changeCurrentProfilPage(state, newCurrentProfilPage) {
@@ -102,6 +108,9 @@ const store = new Vuex.Store({
     },
     addPost(state, post) {
       state.posts.push(post);
+    },
+    addComment(state, comment) {
+      state.comments.push(comment);
     },
     editPost(state, post) {
       state.posts = [
@@ -122,8 +131,19 @@ const store = new Vuex.Store({
     getAllUserPostsFailed(state) {
       state.userPosts = [];
     },
+    getAllCommentsSuccess(state, comments) {
+      state.comments = comments;
+    },
+    getAllCommentsFailed(state) {
+      state.comments = [];
+    },
     updateLikes(state, postToUpdate) {
-      state.posts.push(postToUpdate.data);
+      state.posts = [
+        ...state.posts.map((item) =>
+          item._id !== postToUpdate._id ? item : { ...item, ...postToUpdate }
+        ),
+      ];
+      // state.posts.push(postToUpdate.data);
     },
   },
   actions: {
@@ -242,6 +262,18 @@ const store = new Vuex.Store({
         }
       );
     },
+    async getAllComments({ commit }, token) {
+      return await AuthService.getAllComments(token).then(
+        (response) => {
+          commit("getAllCommentsSuccess", response.data);
+          return Promise.resolve(response);
+        },
+        (error) => {
+          commit("getAllCommentsFailed");
+          return Promise.reject(error);
+        }
+      );
+    },
     async addPost({ commit }, postToken) {
       return await AuthService.newPost(postToken.data, postToken.token).then(
         (response) => {
@@ -302,15 +334,24 @@ const store = new Vuex.Store({
         }
       );
     },
-    async addComment(_, commentToken) {
+    async addComment({ commit }, commentToken) {
       return await AuthService.newComment(
         commentToken.data,
         commentToken.postId,
         commentToken.token
       ).then(
         (response) => {
-          // commit("changeCurrentProfilPage", "MyProfilMessages");
-          // setTimeout(() => router.push(`/auth/user/profil/home`), 1000);
+          const localStorageComments = JSON.parse(
+            localStorage.getItem("comments")
+          );
+          const comment = response.data;
+
+          localStorageComments.push(comment);
+          localStorage.setItem(
+            "comments",
+            JSON.stringify(localStorageComments)
+          );
+          commit("addComment", response.data);
           return Promise.resolve(response);
         },
         (error) => {

@@ -24,6 +24,7 @@ function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("allPosts");
   localStorage.removeItem("userPosts");
+  localStorage.getItem("comments");
 }
 
 function signUp(user) {
@@ -146,6 +147,20 @@ async function getUserPosts(userId, token) {
   }
 }
 
+async function getAllComments(token) {
+  try {
+    const response = await axios.get(`${authUrl}comments`, {
+      headers: {
+        authorization: `bearer ${token}`,
+      },
+    });
+    localStorage.setItem("comments", JSON.stringify(response.data));
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+}
+
 async function newPost(form, token) {
   try {
     const response = await axios.post(`${authUrl}user/posts/add`, form, {
@@ -226,6 +241,7 @@ export default {
   addOneLike,
   getAllPosts,
   getUserPosts,
+  getAllComments,
   newPost,
   editPost,
   deletePost,

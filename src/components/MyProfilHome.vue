@@ -19,6 +19,7 @@ export default {
     const token = this.$store.getters.getToken;
 
     await this.$store.dispatch("getAllPosts", token);
+    await this.$store.dispatch("getAllComments", token);
   },
 };
 </script>
